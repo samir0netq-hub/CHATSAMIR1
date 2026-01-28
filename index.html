@@ -486,30 +486,48 @@
       display: flex;
       flex-direction: column;
     }
+    .section-actions {
+      margin-top: 20px;
+      padding: 0 8px;
+    }
 
-    .btn-create {
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-tertiary));
-      color: white;
-      border: none;
-      padding: 8px 16px;
+    .glass-btn {
+      background: var(--glass-surface);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      padding: 10px 20px;
       border-radius: var(--radius-btn);
       font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.9rem;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
-    .btn-create:hover {
+    .glass-btn:hover {
+      background: var(--glass-hover);
+      border-color: rgba(255, 255, 255, 0.15);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
-    .rooms-list {
+    .glass-btn i {
+      color: var(--accent-primary);
+    }
+.hovered-element {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hovered-element:hover {
+      transform: translateY(-1px) scale(1.02);
+    }
+.rooms-list {
       flex: 1;
       overflow-y: auto;
       display: flex;
@@ -867,11 +885,13 @@
     <section class="glass-panel section-rooms">
       <div class="section-header">
         <span class="section-title"><i class="fa-solid fa-lock"></i> اتاق‌های خصوصی</span>
-        <button class="btn-create" onclick="openModal()">
-                    <i class="fa-solid fa-plus"></i> جدید
-                </button>
       </div>
-      <div class="rooms-list" id="roomsList">
+      <div class="section-actions">
+        <button class="glass-btn btn-create hovered-element" onclick="openModal()">
+          <i class="fa-solid fa-plus"></i> اتاق جدید
+        </button>
+      </div>
+<div class="rooms-list" id="roomsList">
         <!-- JS Content -->
       </div>
     </section>
