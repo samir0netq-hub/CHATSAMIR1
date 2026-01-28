@@ -1,0 +1,772 @@
+
+<!DOCTYPE html>
+<html dir="rtl" lang="fa-IR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>میهن وردپرس - ورود و ثبت نام (Glassmorphism)</title>
+
+  <!-- Import Vazirmatn Font for beautiful Persian typography -->
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"
+    type="text/css" />
+
+  <!-- Import FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-color: #4f46e5;
+      --primary-hover: #4338ca;
+      --text-color: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.7);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --input-bg: rgba(255, 255, 255, 0.07);
+      --input-border: rgba(255, 255, 255, 0.2);
+      --radius: 24px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background-color: #0f172a;
+      /* Dark base */
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text-color);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* --- Background Matte Blobs (Gradients & Shapes) --- */
+    .blob-cont {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: #0f172a;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: float 10s infinite alternate ease-in-out;
+    }
+
+    .blob-1 {
+      width: 400px;
+      height: 400px;
+      background: #4f46e5;
+      top: -100px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .blob-2 {
+      width: 300px;
+      height: 300px;
+      background: #ec4899;
+      bottom: -50px;
+      right: -50px;
+      animation-delay: 2s;
+    }
+
+    .blob-3 {
+      width: 200px;
+      height: 200px;
+      background: #06b6d4;
+      top: 40%;
+      left: 60%;
+      opacity: 0.4;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      100% {
+        transform: translate(20px, 40px);
+      }
+    }
+
+    /* --- Main Glass Container --- */
+    .mwpl-container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      width: 100%;
+      max-width: 900px;
+      border-radius: var(--radius);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      position: relative;
+      min-height: 600px;
+      transform: translateZ(0);
+      /* Hardware acceleration */
+    }
+
+    /* "Built with anycoder" Link */
+    .anycoder-credit {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 100;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      transition: var(--transition);
+    }
+
+    .anycoder-credit:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Left Side - Cover Image (Glassy Style) */
+    .mwpl-cover-section {
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.4) 0%, rgba(236, 72, 153, 0.4) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mwpl-cover-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('https://picsum.photos/seed/tech/600/800') center/cover;
+      opacity: 0.15;
+      mix-blend-mode: overlay;
+    }
+
+    .cover-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .cover-content h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .cover-content p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      line-height: 1.6;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Right Side - Form Section */
+    .mwpl-form-section {
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      background: rgba(0, 0, 0, 0.2);
+      /* Slightly darker than cover */
+    }
+
+    /* Logo */
+    .mwpl-logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .mwpl-logo img,
+    .mwpl-logo h2 {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    /* Form Wrapper */
+    .form-wrapper {
+      transition: var(--transition);
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .form-wrapper.hidden {
+      display: none;
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    /* Inputs (Glassy) */
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 16px 45px 16px 16px;
+      border: 1px solid var(--input-border);
+      border-radius: 14px;
+      background: var(--input-bg);
+      font-family: 'Vazirmatn', sans-serif;
+      font-size: 0.95rem;
+      color: #fff;
+      transition: var(--transition);
+    }
+
+    .input-field::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .input-field:focus {
+      border-color: var(--primary-color);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+    }
+
+    /* Icons inside input */
+    .input-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
+      transition: var(--transition);
+    }
+
+    .input-field:focus+.input-icon {
+      color: #fff;
+    }
+
+    /* Password Toggle */
+    .toggle-password {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .toggle-password:hover {
+      color: #fff;
+    }
+
+    /* Captcha */
+    .captcha-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .captcha-canvas {
+      background: rgba(255, 255, 255, 0.9);
+      /* Lighter for readability */
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .refresh-icon {
+      cursor: pointer;
+      color: var(--text-color);
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+      background: rgba(255, 255, 255, 0.1);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+    }
+
+    .refresh-icon:hover {
+      transform: rotate(180deg);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      font-family: 'Vazirmatn', sans-serif;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color), #ec4899);
+      color: white;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5);
+    }
+
+    .btn-google {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid var(--glass-border);
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-google:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Toggle Link */
+    .toggle-form-text {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .toggle-form-text span {
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .toggle-form-text span:hover {
+      text-decoration: underline;
+    }
+
+    /* Message Box */
+    .message-box {
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      display: none;
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .message-box.error {
+      background-color: rgba(255, 77, 79, 0.2);
+      color: #ff7875;
+      border: 1px solid rgba(255, 77, 79, 0.3);
+      display: block;
+    }
+
+    .message-box.success {
+      background-color: rgba(82, 196, 26, 0.2);
+      color: #b7eb8f;
+      border: 1px solid rgba(82, 196, 26, 0.3);
+      display: block;
+    }
+
+    /* Specific style for the register info box */
+    .message-box.info {
+      background-color: rgba(24, 144, 255, 0.2);
+      color: #91d5ff;
+      border: 1px solid rgba(24, 144, 255, 0.3);
+      display: block;
+    }
+
+    /* Spinner */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .mwpl-container {
+        grid-template-columns: 1fr;
+        max-width: 450px;
+        min-height: auto;
+        margin-top: 40px;
+        margin-bottom: 40px;
+      }
+
+      .mwpl-cover-section {
+        display: none;
+      }
+
+      .mwpl-form-section {
+        padding: 30px 20px;
+      }
+
+      .blob-1 {
+        width: 200px;
+        height: 200px;
+      }
+
+      .blob-2 {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background Blobs for Matte Effect -->
+  <div class="blob-cont">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <a href="https://huggingface.co/spaces/akhaliq/anycoder" target="_blank" class="anycoder-credit">Built with
+    anycoder</a>
+
+  <main class="mwpl-container">
+    <!-- Cover Section (Left) -->
+    <section class="mwpl-cover-section">
+      <div class="cover-content">
+        <div style="font-size: 3.5rem; margin-bottom: 25px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));">
+          <i class="fa-brands fa-wordpress"></i>
+        </div>
+        <h2>به خانواده بزرگ وردپرس خوش آمدید</h2>
+        <p>دسترسی سریع، امن و زیبا به بهترین قالب‌ها و افزونه‌های فارسی وردپرس</p>
+      </div>
+    </section>
+
+    <!-- Form Section (Right) -->
+    <section class="mwpl-form-section">
+
+      <!-- Logo Area -->
+      <div class="mwpl-logo">
+        <img src="https://mihanwp.com/wp-content/uploads/2022/03/logo-type.svg" alt="MihanWP Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<h2 style=\'color:#fff\'>میهن وردپرس</h2>'">
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="form-wrapper">
+        <div id="login-message" class="message-box"></div>
+
+        <!-- Username/Email -->
+        <div class="input-group">
+          <input type="text" id="login-username" class="input-field" placeholder="نام کاربری، ایمیل یا شماره تلفن" required>
+          <i class="fa-regular fa-user input-icon"></i>
+        </div>
+
+        <!-- Password -->
+        <div class="input-group">
+          <input type="password" id="login-password" class="input-field" placeholder="رمز عبور" required>
+          <i class="fa-solid fa-lock input-icon"></i>
+          <i class="fa-regular fa-eye toggle-password" onclick="togglePassword('login-password', this)"></i>
+        </div>
+
+        <!-- Captcha -->
+        <div class="captcha-container">
+          <div class="input-group" style="margin-bottom: 0; flex-grow: 1;">
+            <input type="text" id="login-captcha-input" class="input-field" placeholder="کد امنیتی" style="padding-left: 15px;">
+            <i class="fa-solid fa-shield-halved input-icon"></i>
+          </div>
+          <canvas id="login-canvas" width="100" height="48" class="captcha-canvas" title="کلیک برای تعویض"></canvas>
+          <i class="fa-solid fa-rotate-right refresh-icon" onclick="generateCaptcha('login-canvas')"></i>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">
+          <span class="spinner"></span>
+          <span class="btn-text">ورود به حساب کاربری</span>
+        </button>
+
+        <!-- Google Login -->
+        <button type="button" class="btn btn-google">
+          <img src="https://mihanwp.com/wp-content/plugins/mihanpanel/pro/assets/img/google-logo.svg" alt="Google" style="width: 20px;">
+          ورود با حساب گوگل
+        </button>
+
+        <!-- Toggle to Register -->
+        <div class="toggle-form-text">
+          حساب کاربری ندارید؟
+          <span onclick="switchForm('register')">ثبت نام کنید</span>
+        </div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="form-wrapper hidden">
+        <div id="register-message" class="message-box info">
+          به خانواده ۱۰۰ هزار نفری هم‌میهنان وردپرسی بپیوندید.
+        </div>
+
+        <!-- Username -->
+        <div class="input-group">
+          <input type="text" id="reg-username" class="input-field" placeholder="نام کاربری" required>
+          <i class="fa-regular fa-user input-icon"></i>
+        </div>
+
+        <!-- Email -->
+        <div class="input-group">
+          <input type="email" id="reg-email" class="input-field" placeholder="ایمیل" required>
+          <i class="fa-regular fa-envelope input-icon"></i>
+        </div>
+
+        <!-- Password -->
+        <div class="input-group">
+          <input type="password" id="reg-password" class="input-field" placeholder="رمز عبور" required>
+          <i class="fa-solid fa-lock input-icon"></i>
+          <i class="fa-regular fa-eye toggle-password" onclick="togglePassword('reg-password', this)"></i>
+        </div>
+
+        <!-- Captcha -->
+        <div class="captcha-container">
+          <div class="input-group" style="margin-bottom: 0; flex-grow: 1;">
+            <input type="text" id="reg-captcha-input" class="input-field" placeholder="کد امنیتی" style="padding-left: 15px;">
+            <i class="fa-solid fa-shield-halved input-icon"></i>
+          </div>
+          <canvas id="reg-canvas" width="100" height="48" class="captcha-canvas" title="کلیک برای تعویض"></canvas>
+          <i class="fa-solid fa-rotate-right refresh-icon" onclick="generateCaptcha('reg-canvas')"></i>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">
+          <span class="spinner"></span>
+          <span class="btn-text">ثبت نام</span>
+        </button>
+
+        <!-- Toggle to Login -->
+        <div class="toggle-form-text">
+          قبلاً ثبت نام کرده‌اید؟
+          <span onclick="switchForm('login')">وارد شوید</span>
+        </div>
+      </form>
+
+    </section>
+  </main>
+
+  <script>
+    // --- State Management ---
+    let currentCaptcha = { login: '', register: '' };
+
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+      generateCaptcha('login-canvas');
+      generateCaptcha('reg-canvas');
+      
+      // Canvas click event to refresh
+      document.getElementById('login-canvas').addEventListener('click', () => generateCaptcha('login-canvas'));
+      document.getElementById('reg-canvas').addEventListener('click', () => generateCaptcha('reg-canvas'));
+    });
+
+    // --- UI Functions ---
+
+    // Toggle Password Visibility
+    function togglePassword(inputId, iconElement) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        iconElement.classList.remove('fa-eye');
+        iconElement.classList.add('fa-eye-slash');
+      } else {
+        input.type = "password";
+        iconElement.classList.remove('fa-eye-slash');
+        iconElement.classList.add('fa-eye');
+      }
+    }
+
+    // Switch Between Forms
+    function switchForm(target) {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+
+      if (target === 'register') {
+        loginForm.style.opacity = '0';
+        setTimeout(() => {
+          loginForm.classList.add('hidden');
+          registerForm.classList.remove('hidden');
+          setTimeout(() => {
+            registerForm.style.opacity = '1';
+          }, 50);
+        }, 300);
+      } else {
+        registerForm.style.opacity = '0';
+        setTimeout(() => {
+          registerForm.classList.add('hidden');
+          loginForm.classList.remove('hidden');
+          setTimeout(() => {
+            loginForm.style.opacity = '1';
+          }, 50);
+        }, 300);
+      }
+      
+      // Clear messages
+      document.querySelectorAll('.message-box').forEach(box => {
+        if(!box.classList.contains('info')) { 
+          box.style.display = 'none';
+        }
+      });
+    }
+
+    // Show Feedback Message
+    function showMessage(elementId, text, type) {
+      const el = document.getElementById(elementId);
+      el.textContent = text;
+      el.className = `message-box ${type}`;
+      el.style.display = 'block';
+      
+      if (type === 'success') {
+        setTimeout(() => {
+          el.style.display = 'none';
+        }, 5000);
+      }
+    }
+
+    // --- Captcha Logic (Updated for Glass Theme) ---
+
+    function generateCaptcha(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      // Clear canvas with a semi-transparent light background for glass feel
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.fillRect(0, 0, width, height);
+
+      // Generate Random Code
+      const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let code = '';
+      for (let i = 0; i < 5; i++) {
+        code += chars[Math.floor(Math.random() * chars.length)];
+      }
+
+      // Store code
+      if(canvasId === 'login-canvas') currentCaptcha.login = code;
+      else currentCaptcha.register = code;
+
+      // Draw Text
+      ctx.font = 'bold 24px Vazirmatn, sans-serif';
+      ctx.textBaseline = 'middle';
+      
+      for (let i = 0; i < code.length; i++) {
+        ctx.save();
+        const x = 15 + i * 18;
+        const y = height / 2 + (Math.random() * 10 - 5);
+        const angle = (Math.random() - 0.5) * 0.4;
+        
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        // Darker text for contrast on light captcha bg
+        ctx.fillStyle = `rgb(${50 + Math.random()*50}, ${50 + Math.random()*50}, ${50 + Math.random()*50})`;
+        ctx.fillText(code[i], 0, 0);
+        ctx.restore();
+      }
+
+      // Add Noise (Lines)
+      for (let i = 0; i < 5; i++) {
+        ctx.strokeStyle = `rgba(100, 100, 100, 0.3)`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(Math.random() * width, Math.random() * height);
+        ctx.lineTo(Math.random() * width, Math.random() * height);
+        ctx.stroke();
+      }
+    }
+
+    // --- Form Handling ---
+
+    function handleFormSubmit(e, formType) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      const spinner = btn.querySelector('.spinner');
+      const btnText = btn.querySelector('.btn-text');
+
+      // Basic Validation
+      let isValid = true;
+      const captchaInput = document.getElementById(`${formType}-captcha-input`);
+      const correctCode = currentCaptcha[formType];
+
+      if (captchaInput.value.toUpperCase() !== correctCode) {
+        showMessage(`${formType}-message`, 'کد امنیتی اشتباه است.', 'error');
+        generateCaptcha(`${formType}-canvas`);
+        captchaInput.value = '';
+        return;
+      }
+
+      // Simulate Loading
+      btn.disabled = true;
+      spinner.style.display = 'inline-block';
+      btnText.textContent = ' در حال پردازش...';
+
+      // Simulate API Call
+      setTimeout(() => {
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.textContent = formType === 'login' ? 'ورود به حساب کاربری' : 'ثبت نام';
+
+        // Success Simulation
+        if (formType === 'login') {
+          showMessage('login-message', 'ورود با موفقیت انجام شد. در حال انتقال...', 'success');
+        } else {
+          showMessage('register-message', 'ثبت نام با موفقیت انجام شد. خوش آمدید!', 'success');
+        }
+      }, 1500);
+    }
+
+    document.getElementById('login-form').addEventListener('submit', (e) => handleFormSubmit(e, 'login'));
+    document.getElementById('register-form').addEventListener('submit', (e) => handleFormSubmit(e, 'register'));
+
+  </script>
+</body>
+
+</html>

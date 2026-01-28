@@ -1,0 +1,760 @@
+در اینجا یک فایل HTML کامل و تک‌صفحه‌ای برای صفحه «تنظیمات حساب کاربری» طراحی شده است. این کد شامل HTML معناگرا، CSS
+مدرن (با تاکید بر Glassmorphism و انیمیشن‌ها) و JavaScript خالص برای تعاملات است.
+
+```html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تنظیمات حساب کاربری</title>
+
+  <!-- ایمپورت فونت وزیرمتن (Vazirmatn) -->
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"
+    type="text/css" />
+
+  <!-- ایمپورت آیکون‌ها (RemixIcon) -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    :root {
+      /* پالت رنگی */
+      --bg-color: #0f172a;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-highlight: rgba(255, 255, 255, 0.15);
+      --primary-color: #a78bfa;
+      /* بنفش یاسی ملایم */
+      --primary-glow: rgba(167, 139, 250, 0.4);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --danger-bg: rgba(239, 68, 68, 0.1);
+      --danger-text: #fca5a5;
+      --danger-border: rgba(239, 68, 68, 0.3);
+      --success-color: #34d399;
+
+      /* تنظیمات فاصله و انیمیشن */
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* --- پس‌زمینه متحرک و گرادینت‌ها --- */
+    .background-blobs {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: float 10s infinite ease-in-out alternate;
+    }
+
+    .blob-1 {
+      top: -10%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: #7c3aed;
+      animation-delay: 0s;
+    }
+
+    .blob-2 {
+      bottom: -10%;
+      left: -10%;
+      width: 350px;
+      height: 350px;
+      background: #4f46e5;
+      animation-delay: -5s;
+    }
+
+    .blob-3 {
+      top: 40%;
+      left: 30%;
+      width: 300px;
+      height: 300px;
+      background: #ec4899;
+      opacity: 0.4;
+      animation-delay: -2s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate(30px, 50px) scale(1.1);
+      }
+    }
+
+    /* --- کانتینر اصلی --- */
+    .container {
+      width: 100%;
+      max-width: 700px;
+      padding: 20px;
+      z-index: 1;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* --- استایل‌های شیشه‌ای (Glassmorphism) --- */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* --- هدر --- */
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 300;
+    }
+
+    .anycoder-link {
+      position: absolute;
+      top: -20px;
+      left: 0;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .anycoder-link:hover {
+      opacity: 1;
+      color: var(--primary-color);
+    }
+
+    /* --- بخش پروفایل --- */
+    .profile-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .avatar-container {
+      position: relative;
+      margin-bottom: 20px;
+      cursor: pointer;
+      group: hover;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--glass-border);
+      box-shadow: 0 0 20px var(--primary-glow);
+      transition: var(--transition);
+    }
+
+    .avatar-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: var(--transition);
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .avatar-container:hover .avatar {
+      transform: scale(1.05);
+      border-color: var(--primary-color);
+    }
+
+    .avatar-container:hover .avatar-overlay {
+      opacity: 1;
+    }
+
+    .btn-upload {
+      background: transparent;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-upload:hover {
+      background: var(--primary-color);
+      color: white;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    /* --- فرم اطلاعات --- */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      color: var(--text-main);
+      font-family: 'Vazirmatn', sans-serif;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .form-input[readonly] {
+      cursor: default;
+      opacity: 0.7;
+      border-color: transparent;
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .btn-save {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+      border: none;
+      border-radius: var(--radius-md);
+      color: white;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px var(--primary-glow);
+    }
+
+    .btn-save:active {
+      transform: scale(0.98);
+    }
+
+    /* --- بخش امنیت --- */
+    .security-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .security-info h3 {
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .security-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .btn-logout {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: var(--danger-text);
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-logout:hover {
+      background: rgba(239, 68, 68, 0.2);
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+    }
+
+    /* --- Modal (شیشه‌ای) --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: #1e1b4b;
+      /* رنگ کمی تیره‌تر برای کنتراست */
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      transform: scale(0.9);
+      transition: var(--transition);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+
+    .modal-icon {
+      font-size: 3rem;
+      color: var(--danger-text);
+      margin-bottom: 15px;
+    }
+
+    .modal h3 {
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+
+    .modal p {
+      color: var(--text-muted);
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn-modal {
+      padding: 10px 24px;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      flex: 1;
+    }
+
+    .btn-cancel {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid var(--glass-border);
+    }
+
+    .btn-cancel:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-confirm {
+      background: var(--danger-text);
+      color: #450a0a;
+    }
+
+    .btn-confirm:hover {
+      background: #f87171;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+    }
+
+    /* --- Toast Notification --- */
+    .toast-container {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease-out forwards;
+      min-width: 300px;
+    }
+
+    .toast.success {
+      border-right: 4px solid var(--success-color);
+    }
+
+    .toast.error {
+      border-right: 4px solid var(--danger-text);
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+    }
+
+    /* --- ریسپانسیو --- */
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .glass-card {
+        padding: 20px;
+      }
+
+      .modal {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- پس‌زمینه گرادینت متحرک -->
+  <div class="background-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="container">
+    <!-- هدر -->
+    <header>
+      <a href="https://huggingface.co/spaces/akhaliq/anycoder" target="_blank" class="anycoder-link">
+        Built with anycoder
+      </a>
+      <h1>
+        <i class="ri-settings-4-line"></i>
+        تنظیمات حساب
+      </h1>
+      <p class="subtitle">مدیریت اطلاعات شخصی و امنیت حساب</p>
+    </header>
+
+    <main>
+      <!-- کارت پروفایل -->
+      <section class="glass-card profile-section">
+        <div class="avatar-container" onclick="document.getElementById('fileInput').click()">
+          <img src="https://picsum.photos/seed/user123/200/200" alt="Profile Avatar" class="avatar" id="avatarImg">
+          <div class="avatar-overlay">
+            <i class="ri-camera-lens-line"></i>
+          </div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" hidden>
+
+        <h2 style="margin-bottom: 5px;">کاربر مهمان</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">توسعه‌دهنده وب</p>
+
+        <button class="btn-upload" onclick="document.getElementById('fileInput').click()">
+                    <i class="ri-upload-cloud-2-line"></i>
+                    تغییر تصویر پروفایل
+                </button>
+      </section>
+
+      <!-- کارت اطلاعات شخصی -->
+      <section class="glass-card">
+        <div class="form-group">
+          <label class="form-label" for="displayName">نام نمایشی</label>
+          <div class="input-wrapper">
+            <input type="text" id="displayName" class="form-input" value="کاربر مهمان" placeholder="نام خود را وارد کنید">
+            <i class="ri-user-line input-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="username">نام کاربری</label>
+          <div class="input-wrapper">
+            <input type="text" id="username" class="form-input" value="@guest_user" readonly>
+            <i class="ri-at-line input-icon"></i>
+          </div>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">
+            نام کاربری قابل تغییر نیست.
+          </p>
+        </div>
+
+        <button class="btn-save" id="saveBtn">
+                    <i class="ri-save-3-line"></i>
+                    ذخیره تغییرات
+                </button>
+      </section>
+
+      <!-- کارت امنیت -->
+      <section class="glass-card security-actions">
+        <div class="security-info">
+          <h3>خروج از حساب</h3>
+          <p>دسترسی به حساب را در این دستگاه مسدود کنید.</p>
+        </div>
+        <button class="btn-logout" id="logoutBtn">
+                    <i class="ri-logout-box-r-line"></i>
+                    خروج
+                </button>
+      </section>
+    </main>
+  </div>
+
+  <!-- مودال تایید خروج -->
+  <div class="modal-overlay" id="logoutModal">
+    <div class="modal">
+      <div class="modal-icon">
+        <i class="ri-error-warning-line"></i>
+      </div>
+      <h3>آیا مطمئن هستید؟</h3>
+      <p>با خروج از حساب، باید مجدداً برای دسترسی وارد شوید. این عملیات امنیت حساب شما را تضمین می‌کند.</p>
+      <div class="modal-actions">
+        <button class="btn-modal btn-cancel" id="cancelLogout">انصراف</button>
+        <button class="btn-modal btn-confirm" id="confirmLogout">خروج از حساب</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- کانتینر Toast -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // --- انتخاب عناصر ---
+        const fileInput = document.getElementById('fileInput');
+        const avatarImg = document.getElementById('avatarImg');
+        const saveBtn = document.getElementById('saveBtn');
+        const displayNameInput = document.getElementById('displayName');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
+        const cancelLogout = document.getElementById('cancelLogout');
+        const confirmLogout = document.getElementById('confirmLogout');
+        const toastContainer = document.getElementById('toastContainer');
+
+        // --- مدیریت آپلود تصویر ---
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatarImg.src = e.target.result;
+                    showToast('تصویر پروفایل با موفقیت تغییر کرد', 'success');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // --- مدیریت ذخیره اطلاعات ---
+        saveBtn.addEventListener('click', function() {
+            const newName = displayNameInput.value.trim();
+            
+            // شبیه‌سازی لودینگ
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> در حال ذخیره...';
+            saveBtn.style.opacity = '0.7';
+            saveBtn.disabled = true;
+
+            setTimeout(() => {
+                saveBtn.innerHTML = originalText;
+                saveBtn.style.opacity = '1';
+                saveBtn.disabled = false;
+                
+                if (newName.length < 3) {
+                    showToast('نام نمایشی باید حداقل ۳ کاراکتر باشد', 'error');
+                } else {
+                    showToast('تغییرات با موفقیت ذخیره شد', 'success');
+                }
+            }, 1200);
+        });
+
+        // --- مدیریت مودال خروج ---
+        logoutBtn.addEventListener('click', () => {
+            logoutModal.classList.add('active');
+        });
+
+        cancelLogout.addEventListener('click', () => {
+            logoutModal.classList.remove('active');
+        });
+
+        // بستن مودال با کلیک بیرون
+        logoutModal.addEventListener('click', (e) => {
+            if (e.target === logoutModal) {
+                logoutModal.classList.remove('active');
+            }
+        });
+
+        confirmLogout.addEventListener('click', () => {
+            showToast('در حال خروج از حساب...', 'success');
+            setTimeout(() => {
+                // اینجا می‌توان ریدایرکت کرد
+                logoutModal.classList.remove('active');
+                document.body.style.opacity = '0';
+                setTimeout(() => {
+                    location.reload(); // شبیه‌سازی خروج کامل
+                }, 1000);
+            }, 1500);
+        });
+
+        // --- سیستم Toast Notification ---
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? '<i class="ri-checkbox-circle-line"></i>' : '<i class="ri-close-circle-line"></i>';
+            
+            toast.innerHTML = `
+                ${icon}
+                <span>${message}</span>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // حذف خودکار بعد از ۳ ثانیه
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s forwards';
+                toast.addEventListener('animationend', () => {
+                    toast.remove();
+                });
+            }, 3000);
+        }
+  </script>
+</body>
+
+</html>
+```

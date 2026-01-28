@@ -1,0 +1,1180 @@
+```html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پنل مدیریت شیشه‌ای | Glass Admin</title>
+
+  <!-- Font: Vazirmatn -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;300;400;500;700;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Icons: FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --accent-color: #8b5cf6;
+      /* Violet */
+      --accent-hover: #7c3aed;
+      --success-color: #10b981;
+      --danger-color: #ef4444;
+      --warning-color: #f59e0b;
+      --blur-amount: 12px;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      outline: none;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background-color: var(--bg-color);
+      background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Ambient Background Orbs for Glass Effect */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.4;
+      animation: floatOrb 10s infinite ease-in-out alternate;
+    }
+
+    .orb-1 {
+      top: -10%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: #4c1d95;
+    }
+
+    .orb-2 {
+      bottom: -10%;
+      left: -10%;
+      width: 600px;
+      height: 600px;
+      background: #be185d;
+      animation-delay: -5s;
+    }
+
+    @keyframes floatOrb {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      100% {
+        transform: translate(30px, 50px);
+      }
+    }
+
+    /* Glassmorphism Utility Class */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--blur-amount));
+      -webkit-backdrop-filter: blur(var(--blur-amount));
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      border-radius: var(--radius);
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      width: 100%;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      margin-bottom: 30px;
+    }
+
+    .header-title h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to left, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-profile {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .profile-info {
+      text-align: left;
+    }
+
+    .profile-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .profile-role {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: rgba(139, 92, 246, 0.2);
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--success-color);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--success-color);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--success-color);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-info h3 {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+    }
+
+    .stat-info p {
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Main Content Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+    }
+
+    .col-span-12 {
+      grid-column: span 12;
+    }
+
+    .col-span-8 {
+      grid-column: span 12;
+    }
+
+    .col-span-6 {
+      grid-column: span 12;
+    }
+
+    .col-span-4 {
+      grid-column: span 12;
+    }
+
+    @media (min-width: 1024px) {
+      .col-span-8 {
+        grid-column: span 8;
+      }
+
+      .col-span-6 {
+        grid-column: span 6;
+      }
+
+      .col-span-4 {
+        grid-column: span 4;
+      }
+    }
+
+    /* Section Styling */
+    section {
+      padding: 25px;
+      margin-bottom: 24px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Vazirmatn', sans-serif;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger-color);
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-icon {
+      padding: 6px;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Tables & Lists */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th {
+      text-align: right;
+      padding: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    td {
+      padding: 15px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .user-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-online {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success-color);
+    }
+
+    .status-offline {
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-secondary);
+    }
+
+    .status-locked {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger-color);
+    }
+
+    .role-select {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--glass-border);
+      color: white;
+      padding: 6px;
+      border-radius: 6px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Role Cards */
+    .role-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .role-card {
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .role-permissions {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Room List */
+    .room-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .room-item:last-child {
+      border-bottom: none;
+    }
+
+    .room-info h4 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .room-meta {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .room-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Activity Logs */
+    .log-item {
+      display: flex;
+      gap: 15px;
+      padding: 10px 0;
+      font-size: 0.9rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .log-time {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      min-width: 60px;
+    }
+
+    .log-content {
+      flex: 1;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 500px;
+      padding: 30px;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+
+    .modal h2 {
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      color: white;
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent-color);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      /* RTL adjustment */
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+      /* Align right in RTL */
+      pointer-events: none;
+    }
+
+    @media (min-width: 768px) {
+      .toast-container {
+        left: auto;
+        right: 20px;
+        align-items: flex-end;
+      }
+    }
+
+    .toast {
+      min-width: 250px;
+      padding: 15px 20px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--glass-border);
+      color: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      animation: slideIn 0.3s ease;
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Footer */
+    footer {
+      margin-top: auto;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    footer a {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="glass">
+      <div class="header-title">
+        <h1>پنل مدیریت</h1>
+      </div>
+      <div class="header-profile">
+        <div class="system-status">
+          <div class="status-dot"></div>
+          <span>Stable</span>
+        </div>
+        <div class="profile-info">
+          <div class="profile-name">علی رضایی</div>
+          <span class="profile-role">Admin</span>
+        </div>
+        <img src="https://picsum.photos/seed/admin/40/40" alt="Admin" class="avatar">
+      </div>
+    </header>
+
+    <!-- Stats Cards -->
+    <section class="stats-grid">
+      <div class="stat-card glass">
+        <div class="stat-info">
+          <h3>کل کاربران</h3>
+          <p id="stat-total-users">0</p>
+        </div>
+        <div class="stat-icon" style="color: #60a5fa;">
+          <i class="fa-solid fa-users"></i>
+        </div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-info">
+          <h3>کاربران آنلاین</h3>
+          <p id="stat-online-users">0</p>
+        </div>
+        <div class="stat-icon" style="color: #34d399;">
+          <i class="fa-solid fa-signal"></i>
+        </div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-info">
+          <h3>اتاق‌های فعال</h3>
+          <p id="stat-active-rooms">0</p>
+        </div>
+        <div class="stat-icon" style="color: #f472b6;">
+          <i class="fa-solid fa-door-open"></i>
+        </div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-info">
+          <h3>پیام‌های امروز</h3>
+          <p>۱۲۸</p>
+        </div>
+        <div class="stat-icon" style="color: #fbbf24;">
+          <i class="fa-solid fa-comment-dots"></i>
+        </div>
+      </div>
+    </section>
+
+    <div class="dashboard-grid">
+
+      <!-- Users Management -->
+      <section class="col-span-8 glass">
+        <div class="section-header">
+          <div class="section-title">
+            <i class="fa-solid fa-users-gear"></i>
+            مدیریت کاربران
+          </div>
+        </div>
+        <div class="table-container">
+          <table id="users-table">
+            <thead>
+              <tr>
+                <th>کاربر</th>
+                <th>نقش</th>
+                <th>وضعیت</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- JS renders here -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Roles Management -->
+      <section class="col-span-4 glass">
+        <div class="section-header">
+          <div class="section-title">
+            <i class="fa-solid fa-shield-halved"></i>
+            مدیریت نقش‌ها
+          </div>
+          <button class="btn btn-primary btn-icon" onclick="openModal('role-modal')">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+        <div class="role-list" id="role-list">
+          <!-- JS renders here -->
+        </div>
+      </section>
+
+      <!-- Rooms Management -->
+      <section class="col-span-6 glass">
+        <div class="section-header">
+          <div class="section-title">
+            <i class="fa-solid fa-comments"></i>
+            مدیریت اتاق‌ها
+          </div>
+        </div>
+        <div id="room-list">
+          <!-- JS renders here -->
+        </div>
+      </section>
+
+      <!-- Announcements -->
+      <section class="col-span-6 glass">
+        <div class="section-header">
+          <div class="section-title">
+            <i class="fa-solid fa-bullhorn"></i>
+            اعلان‌ها
+          </div>
+          <button class="btn btn-primary" onclick="openModal('announce-modal')">
+            <i class="fa-solid fa-plus"></i> ایجاد اعلان
+          </button>
+        </div>
+        <div id="announcement-list">
+          <!-- JS renders here -->
+        </div>
+      </section>
+
+      <!-- Logs -->
+      <section class="col-span-12 glass">
+        <div class="section-header">
+          <div class="section-title">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            لاگ فعالیت‌ها
+          </div>
+        </div>
+        <div id="activity-logs" style="max-height: 200px; overflow-y: auto;">
+          <!-- JS renders here -->
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <footer>
+    Built with <a href="https://huggingface.co/spaces/akhaliq/anycoder" target="_blank">anycoder</a>
+  </footer>
+
+  <!-- Modal: Add Announcement -->
+  <div id="announce-modal" class="modal-overlay">
+    <div class="modal glass">
+      <h2>ایجاد اعلان جدید</h2>
+      <div class="form-group">
+        <label>متن اعلان</label>
+        <input type="text" id="new-announce-text" class="form-control" placeholder="متن پیام...">
+      </div>
+      <div class="modal-actions">
+        <button class="btn" style="background: rgba(255,255,255,0.1);" onclick="closeModal('announce-modal')">انصراف</button>
+        <button class="btn btn-primary" onclick="addAnnouncement()">انتشار</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add Role -->
+  <div id="role-modal" class="modal-overlay">
+    <div class="modal glass">
+      <h2>افزودن نقش جدید</h2>
+      <div class="form-group">
+        <label>نام نقش</label>
+        <input type="text" id="new-role-name" class="form-control" placeholder="مثال: Manager">
+      </div>
+      <div class="form-group">
+        <label>سطح دسترسی</label>
+        <input type="text" id="new-role-perm" class="form-control" placeholder="توضیح دسترسی...">
+      </div>
+      <div class="modal-actions">
+        <button class="btn" style="background: rgba(255,255,255,0.1);" onclick="closeModal('role-modal')">انصراف</button>
+        <button class="btn btn-primary" onclick="addRole()">افزودن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirm Action -->
+  <div id="confirm-modal" class="modal-overlay">
+    <div class="modal glass">
+      <h2>تأیید عملیات</h2>
+      <p id="confirm-msg" style="color: var(--text-secondary); margin-bottom: 20px;">آیا مطمئن هستید؟</p>
+      <div class="modal-actions">
+        <button class="btn" style="background: rgba(255,255,255,0.1);" onclick="closeModal('confirm-modal')">خیر</button>
+        <button class="btn btn-danger" id="confirm-btn-action">بله</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // --- Default Data State ---
+    const state = {
+      users: [
+        { id: 1, name: 'علی رضایی', role: 'Admin', status: 'online', avatar: 'ali' },
+        { id: 2, name: 'سارا محمدی', role: 'Support', status: 'online', avatar: 'sara' },
+        { id: 3, name: 'محمد حسینی', role: 'Moderator', status: 'offline', avatar: 'mohammad' },
+        { id: 4, name: 'نرگس کریمی', role: 'User', status: 'online', avatar: 'narges' },
+        { id: 5, name: 'امیر عباسی', role: 'User', status: 'offline', avatar: 'amir' }
+      ],
+      roles: [
+        { id: 'admin', name: 'Admin', permission: 'دسترسی کامل', fixed: true },
+        { id: 'support', name: 'Support', permission: 'مدیریت کاربران و اتاق‌ها', fixed: true },
+        { id: 'mod', name: 'Moderator', permission: 'مدیریت پیام‌ها و اتاق‌ها', fixed: true },
+        { id: 'user', name: 'User', permission: 'دسترسی عادی', fixed: true }
+      ],
+      rooms: [
+        { id: 1, name: 'گپ آزاد', type: 'عمومی', members: 42, active: true, locked: false },
+        { id: 2, name: 'برنامه‌نویسی', type: 'عمومی', members: 18, active: true, locked: false },
+        { id: 3, name: 'تیم طراحی', type: 'خصوصی', members: 6, active: true, locked: false },
+        { id: 4, name: 'ادمین‌ها', type: 'خصوصی', members: 3, active: true, locked: true }
+      ],
+      announcements: [
+        'به‌روزرسانی جدید سیستم',
+        'قوانین جدید چت',
+        'نگهداری سرور امشب ساعت ۲۳'
+      ],
+      logs: []
+    };
+
+    // --- Init ---
+    document.addEventListener('DOMContentLoaded', () => {
+      renderUsers();
+      renderRoles();
+      renderRooms();
+      renderAnnouncements();
+      renderStats();
+      addLog('سیستم با موفقیت بارگذاری شد');
+    });
+
+    // --- Render Functions ---
+
+    function renderStats() {
+      document.getElementById('stat-total-users').innerText = state.users.length;
+      const onlineCount = state.users.filter(u => u.status === 'online').length;
+      document.getElementById('stat-online-users').innerText = onlineCount;
+      const activeRoomsCount = state.rooms.filter(r => r.active).length;
+      document.getElementById('stat-active-rooms').innerText = activeRoomsCount;
+    }
+
+    function renderUsers() {
+      const tbody = document.querySelector('#users-table tbody');
+      tbody.innerHTML = '';
+
+      state.users.forEach(user => {
+        const tr = document.createElement('tr');
+        
+        // Role Options
+        let roleOptions = '';
+        state.roles.forEach(r => {
+          roleOptions += `<option value="${r.name}" ${user.role === r.name ? 'selected' : ''}>${r.name}</option>`;
+        });
+
+        // Status Logic
+        let statusClass = user.status === 'online' ? 'status-online' : 'status-offline';
+        let statusText = user.status === 'online' ? 'آنلاین' : 'آفلاین';
+        if(user.isBlocked) {
+          statusClass = 'status-locked';
+          statusText = 'مسدود';
+        }
+
+        tr.innerHTML = `
+          <td>
+            <div class="user-cell">
+              <img src="https://picsum.photos/seed/${user.avatar}/40/40" class="avatar" alt="${user.name}">
+              <span>${user.name}</span>
+            </div>
+          </td>
+          <td>
+            <select class="role-select" onchange="changeUserRole(${user.id}, this.value)">
+              ${roleOptions}
+            </select>
+          </td>
+          <td>
+            <span class="status-badge ${statusClass}">
+              <i class="fa-solid fa-circle" style="font-size: 6px;"></i>
+              ${statusText}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-icon ${user.isBlocked ? 'btn-primary' : 'btn-danger'}" 
+                    onclick="toggleBlock(${user.id})" 
+                    title="${user.isBlocked ? 'آزادسازی' : 'مسدود'}">
+              <i class="fa-solid ${user.isBlocked ? 'fa-unlock' : 'fa-ban'}"></i>
+            </button>
+            <button class="btn btn-icon" style="background: rgba(255,255,255,0.1);" title="مشاهده">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      renderStats();
+    }
+
+    function renderRoles() {
+      const list = document.getElementById('role-list');
+      list.innerHTML = '';
+      
+      state.roles.forEach(role => {
+        const div = document.createElement('div');
+        div.className = 'role-card glass';
+        div.innerHTML = `
+          <div>
+            <div style="font-weight: bold;">${role.name}</div>
+            <div class="role-permissions">${role.permission}</div>
+          </div>
+          ${!role.fixed ? `
+            <button class="btn btn-danger btn-icon" onclick="deleteRole('${role.id}')" title="حذف">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          ` : '<i class="fa-solid fa-lock" style="color: var(--text-secondary); font-size: 0.8rem;"></i>'}
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function renderRooms() {
+      const list = document.getElementById('room-list');
+      list.innerHTML = '';
+
+      state.rooms.forEach(room => {
+        const div = document.createElement('div');
+        div.className = 'room-item';
+        
+        const typeIcon = room.type === 'عمومی' ? 'fa-earth-americas' : 'fa-lock';
+        const lockStatus = room.locked ? '<i class="fa-solid fa-lock" style="color:var(--danger-color)"></i>' : '<i class="fa-solid fa-lock-open" style="color:var(--success-color)"></i>';
+
+        div.innerHTML = `
+          <div class="room-info">
+            <h4>${room.name} ${room.locked ? '(قفل)' : ''}</h4>
+            <div class="room-meta">
+              <i class="fa-solid ${typeIcon}"></i> ${room.type} | 
+              <i class="fa-solid fa-users"></i> ${room.members} عضو
+            </div>
+          </div>
+          <div class="room-actions">
+            <button class="btn btn-icon" style="background: rgba(255,255,255,0.1);" onclick="copyLink('${room.name}')" title="کپی لینک">
+              <i class="fa-regular fa-copy"></i>
+            </button>
+            <button class="btn btn-icon" style="background: rgba(255,255,255,0.1);" onclick="toggleLockRoom(${room.id})" title="قفل/باز">
+              ${lockStatus}
+            </button>
+            <button class="btn btn-danger btn-icon" onclick="deleteRoom(${room.id})" title="حذف">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+      renderStats();
+    }
+
+    function renderAnnouncements() {
+      const list = document.getElementById('announcement-list');
+      list.innerHTML = '';
+      
+      state.announcements.forEach(text => {
+        const div = document.createElement('div');
+        div.style.padding = "10px 0";
+        div.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
+        div.style.display = "flex";
+        div.style.alignItems = "center";
+        div.style.gap = "10px";
+        div.innerHTML = `
+          <i class="fa-solid fa-bell" style="color: var(--accent-color); font-size: 0.8rem;"></i>
+          <span>${text}</span>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function addLog(message) {
+      const now = new Date();
+      const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+      state.logs.unshift({ time: timeStr, message });
+      if(state.logs.length > 20) state.logs.pop();
+      
+      const logContainer = document.getElementById('activity-logs');
+      const div = document.createElement('div');
+      div.className = 'log-item';
+      div.innerHTML = `
+        <div class="log-time">${timeStr}</div>
+        <div class="log-content">${message}</div>
+      `;
+      logContainer.prepend(div);
+    }
+
+    // --- Actions & Interactions ---
+
+    function changeUserRole(userId, newRole) {
+      const user = state.users.find(u => u.id === userId);
+      if (user) {
+        const oldRole = user.role;
+        user.role = newRole;
+        addLog(`نقش کاربر ${user.name} از ${oldRole} به ${newRole} تغییر کرد.`);
+        showToast(`نقش ${user.name} تغییر کرد.`, 'success');
+      }
+    }
+
+    function toggleBlock(userId) {
+      const user = state.users.find(u => u.id === userId);
+      if (user) {
+        user.isBlocked = !user.isBlocked;
+        if(user.isBlocked) user.status = 'offline'; // Visual update
+        renderUsers();
+        const action = user.isBlocked ? 'مسدود' : 'آزاد شد';
+        addLog(`کاربر ${user.name} ${action}.`);
+        showToast(`کاربر ${action} شد.`, user.isBlocked ? 'error' : 'success');
+      }
+    }
+
+    function toggleLockRoom(roomId) {
+      const room = state.rooms.find(r => r.id === roomId);
+      if (room) {
+        room.locked = !room.locked;
+        renderRooms();
+        addLog(`اتاق ${room.name} ${room.locked ? 'قفل' : 'باز'} شد.`);
+        showToast(`وضعیت اتاق تغییر کرد.`, 'info');
+      }
+    }
+
+    function deleteRoom(roomId) {
+      showConfirm('آیا از حذف این اتاق مطمئن هستید؟', () => {
+        const idx = state.rooms.findIndex(r => r.id === roomId);
+        if(idx > -1) {
+          const name = state.rooms[idx].name;
+          state.rooms.splice(idx, 1);
+          renderRooms();
+          addLog(`اتاق ${name} حذف شد.`);
+          showToast('اتاق حذف شد.', 'error');
+        }
+      });
+    }
+
+    function copyLink(roomName) {
+      // Mock copy
+      const link = `https://chat.app/invite/${encodeURIComponent(roomName)}`;
+      navigator.clipboard.writeText(link).then(() => {
+        showToast('لینک دعوت کپی شد!', 'success');
+      });
+    }
+
+    function addAnnouncement() {
+      const input = document.getElementById('new-announce-text');
+      const text = input.value.trim();
+      if (text) {
+        state.announcements.unshift(text);
+        renderAnnouncements();
+        input.value = '';
+        closeModal('announce-modal');
+        addLog(`اعلان جدید ایجاد شد: ${text}`);
+        showToast('اعلان جدید منتشر شد.', 'success');
+      }
+    }
+
+    function addRole() {
+      const nameInput = document.getElementById('new-role-name');
+      const permInput = document.getElementById('new-role-perm');
+      const name = nameInput.value.trim();
+      const perm = permInput.value.trim();
+
+      if(name) {
+        state.roles.push({
+          id: 'role-' + Date.now(),
+          name: name,
+          permission: perm || 'سطح دسترسی خاص',
+          fixed: false
+        });
+        renderRoles();
+        renderUsers(); // Update dropdowns
+        nameInput.value = '';
+        permInput.value = '';
+        closeModal('role-modal');
+        addLog(`نقش جدید ${name} ایجاد شد.`);
+        showToast('نقش جدید اضافه شد.', 'success');
+      }
+    }
+
+    function deleteRole(roleId) {
+      showConfirm('آیا از حذف این نقش مطمئن هستید؟', () => {
+        const idx = state.roles.findIndex(r => r.id === roleId);
+        if(idx > -1) {
+          const name = state.roles[idx].name;
+          state.roles.splice(idx, 1);
+          renderRoles();
+          renderUsers(); // Update dropdowns
+          addLog(`نقش ${name} حذف شد.`);
+          showToast('نقش حذف شد.', 'error');
+        }
+      });
+    }
+
+    // --- UI Utilities ---
+
+    let currentConfirmCallback = null;
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function showConfirm(msg, callback) {
+      document.getElementById('confirm-msg').innerText = msg;
+      currentConfirmCallback = callback;
+      openModal('confirm-modal');
+      
+      // Re-bind the Yes button
+      const yesBtn = document.getElementById('confirm-btn-action');
+      yesBtn.onclick = () => {
+        if (currentConfirmCallback) currentConfirmCallback();
+        closeModal('confirm-modal');
+      };
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      
+      let icon = 'fa-info-circle';
+      let color = 'var(--accent-color)';
+      
+      if (type === 'success') {
+        icon = 'fa-check-circle';
+        color = 'var(--success-color)';
+      } else if (type === 'error') {
+        icon = 'fa-exclamation-circle';
+        color = 'var(--danger-color)';
+      }
+
+      toast.innerHTML = `
+        <i class="fa-solid ${icon}" style="color: ${color}; font-size: 1.2rem;"></i>
+        <span>${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      // Remove after 3 seconds
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+
+</html>
